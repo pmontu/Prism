@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Win a Challenge</title>
+    <title>Gym Challenger</title>
 
     <!-- Bootstrap -->
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,7 +14,7 @@
   <body>
     <div class="container" ng-app="myApp" ng-controller="myCtrl">
       <div class="page-header">
-      <h1>Win a Challenge<small> <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Vijay Innamuri</small></h1>
+      <h1>Challengymar<small>Add Challenge</small></h1>
       </div>
 
       <form class="form-horizontal">
@@ -43,34 +43,12 @@
 		    </div>
 		  </div>
 		  <div class="form-group">
-		    <div class="col-sm-offset-2 col-sm-4">
-				<select class="form-control" size="5" multiple ng-multiple="true" ng-model="challenge.friends" ng-options="u.first_name+' ('+u.username+')' for u in user_list"></select>
-		    </div>
-		  </div>
-
-		  <div class="form-group">
 		    <div class="col-sm-offset-2 col-sm-10">
 		      <button type="submit" class="btn btn-default" ng-click="createChallenge()">Add</button>
 		    </div>
 		  </div>
 		</form>
-		
-		<p class="bg-primary">challenge: {{challenge}}</p>
-
-		<div class="panel panel-default">
-		<!-- Default panel contents -->
-		<div class="panel-heading">Challenges</div>
-
-		<!-- Table -->
-		<table class="table">
-			<tr ng-repeat="challenge in challenge_list">
-				<td>{{challenge.title}}</td>
-				<td>{{challenge.frequency}}</td>
-				<td>{{challenge.startdate}}</td>
-				<td>{{challenge.numberofdays}}</td>
-			</tr>
-		</table>
-		</div>
+		<p class="bg-primary">Debugging: {{challenge}}</p>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -78,31 +56,9 @@
 	<script>
 	var app = angular.module('myApp', []);
 	app.controller('myCtrl', function($scope, $http) {
-
 		$scope.createChallenge = function(){
-			$http.post("http://127.0.0.1:12345/challenge/add/", $scope.challenge)
-			.success(function(data)
-				{
-					$scope.getChallenges();
-				})
-			.error(function(){alert("error creating the challenge");});
-
+			$http.post("http://127.0.0.1:12345/challenge/add/", $scope.challenge).success(function(data){alert(data);}).error(function(){alert("error");});
 		}
-
-		$scope.getChallenges = function(){
-			$http.get("http://127.0.0.1:12345/challenge/list/").success(function(data){$scope.challenge_list = data;}).error(function(){alert("error getting list of challenges");});
-		}
-
-		$scope.getUsers = function(){
-			$http.get("http://127.0.0.1:12345/challenge/user/list/").success(function(data){$scope.user_list = data;}).error(function(){alert("error getting list of users");});
-		}
-
-		function init(){
-			$scope.getUsers();
-			$scope.getChallenges();
-		}
-		
-		init()
 	});
 	app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
